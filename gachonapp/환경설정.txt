@@ -1,0 +1,11 @@
+프로젝트 open시 build.gradle 클릭해서 열기
+
+
+setting - plugin lombok 검색 실행 and Gradle 설치(재시작)
+setting - Annotation Processors 검색 - Enable annotation processing 체크 (재시작)
+
+실행 오류시
+setting - build tools - Gradle
+Build and run using: Gradle -> IntelliJ IDEA
+Run tests using: Gradle -> IntelliJ IDEA
+
