@@ -61,6 +61,11 @@ public class Main {
                     .timeout(1000)
                     .get();
         }
-
+        System.out.println("\t" + "!!!!!!!!!!!!!!!!!!!!!Warning!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println("\t" + "!!!!!!!                                      !!!!!!!");
+        System.out.println("\t" + "!!!!!!!Delete id, password before push to git!!!!!!!");
+        System.out.println("\t" + "!!!!!!!                                      !!!!!!!");
+        System.out.println("\t" + "!!!!!!!!!!!!!!!!!!!!!Warning!!!!!!!!!!!!!!!!!!!!!!!!");
     }
 }
+
