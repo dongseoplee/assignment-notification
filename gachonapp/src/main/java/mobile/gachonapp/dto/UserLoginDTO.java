@@ -1,12 +1,12 @@
-package mobile.gachonapp.domain;
-
+package mobile.gachonapp.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class Member {
+public class UserLoginDTO {
 
     private String id;
     private String password;
+
 }
