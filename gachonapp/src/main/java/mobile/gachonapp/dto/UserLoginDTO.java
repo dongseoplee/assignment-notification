@@ -2,11 +2,19 @@ package mobile.gachonapp.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import mobile.gachonapp.domain.User;
 
-@Getter @Setter
+@Getter
 public class UserLoginDTO {
 
-    private String id;
+    private String userId;
     private String password;
+
+    public User toEntity() {
+        return User.builder()
+                .userId(userId)
+                .build();
+    }
+
 
 }

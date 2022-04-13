@@ -24,7 +24,7 @@ public class Assignment {
     private Subject subject;
 
     @Enumerated(EnumType.STRING)
-    private AssignmentSubmitStatus assignmentSubmitStatus;
+    private AssignmentSubmitStatus assignmentSubmitStatus = AssignmentSubmitStatus.N;
 }
 
 
