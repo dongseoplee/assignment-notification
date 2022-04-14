@@ -9,6 +9,7 @@ import mobile.gachonapp.service.UserService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -19,7 +20,7 @@ public class UserApiController {
     private final UserService userService;
 
     @PostMapping("/api/login")
-    public Result< Map<String, String> > login(@RequestBody @Validated UserLoginDTO userLoginDTO) throws Exception {
+    public Result< Map<String, String> > login(@RequestBody @Validated UserLoginDTO userLoginDTO) throws IOException {
 
         log.info(userLoginDTO.toString());
         Map<String, String> session = userService.loginUser(userLoginDTO);

@@ -19,17 +19,12 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public Map<String, String> loginUser(UserLoginDTO userLoginDTO) throws Exception {
+    public Map<String, String> loginUser(UserLoginDTO userLoginDTO) throws IOException {
 
         Crawling crawling = new Crawling();
-        Map<String, String> session = null;
 
-        try {
-            session = crawling.checkLogin(userLoginDTO.getUserId(), userLoginDTO.getPassword());
-        } catch (IOException e) {
-            //TODO: 로그인 실패시 에러를 컨트롤러로 던진다
-            throw new Exception();
-        }
+        //가천 서버로부터 받은 세션 저장
+        Map<String, String> session = crawling.checkLogin(userLoginDTO.getUserId(), userLoginDTO.getPassword());
 
         //새로운 사용자면 데이터베이스에 등록
         /*if(userRepository.findByUserId(userLoginDTO.getUserId()) == null){

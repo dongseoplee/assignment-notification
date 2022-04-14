@@ -1,5 +1,6 @@
 package mobile.gachonapp.crawling;
 
+import mobile.gachonapp.api.custom_exception.WrongLoginUserException;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -67,7 +68,7 @@ public class Crawling {
                 .execute();
 
         if (isWrongUser(loginConnection)) {
-            throw new IOException();
+            throw new WrongLoginUserException();
         }
 
         return loginConnection.cookies();
