@@ -1,4 +1,4 @@
-package mobile.gachonapp.api;
+package mobile.gachonapp.api.response;
 
 
 import lombok.AllArgsConstructor;
@@ -10,8 +10,7 @@ import lombok.Data;
 @Builder
 public class Result<T> {
 
-    private int statusCode;
-    private ResponseMessage responseMessage;
+    private Response response;
     private T data;
 
 }

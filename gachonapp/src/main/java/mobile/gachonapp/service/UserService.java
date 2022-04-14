@@ -32,15 +32,15 @@ public class UserService {
         }
 
         //새로운 사용자면 데이터베이스에 등록
-        if(userRepository.findByUserId(userLoginDTO.getUserId()) == null){
+        /*if(userRepository.findByUserId(userLoginDTO.getUserId()) == null){
             userRepository.save(userLoginDTO.toEntity());
-        }
+        }*/
 
         return session;
     }
 
-    private void validateDuplicate(UserLoginDTO userLoginDTO) {
+    /*private void validateDuplicate(UserLoginDTO userLoginDTO) {
         User user = userRepository.findByUserId(userLoginDTO.getUserId());
-    }
+    }*/
 
 }

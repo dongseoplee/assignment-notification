@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Getter @Setter
+
 @Entity
 @Builder
+@Getter @Setter
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
