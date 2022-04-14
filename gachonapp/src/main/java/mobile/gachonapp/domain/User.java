@@ -21,12 +21,11 @@ public class User {
 
     private String userId;
 
-    /*//db에 저장하지 않는 컬럼
-    @Transient
-    private String password;*/
+    //세션값 저장 -- 테이블을 분리해야하나??
+    private String session;
 
     @OneToMany(mappedBy = "user")
-    private List<UserCourse> userSubjects = new ArrayList<>();
+    private List<UserAssignment> userAssignments = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private AutoLoginStatus autoLoginStatus = AutoLoginStatus.N;

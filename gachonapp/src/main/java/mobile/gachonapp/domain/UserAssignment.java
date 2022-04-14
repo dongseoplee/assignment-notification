@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter @Setter
-public class UserCourse {
+public class UserAssignment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,7 +16,7 @@ public class UserCourse {
     @ManyToOne @JoinColumn(name = "userId")
     private User user;
 
-    @ManyToOne @JoinColumn(name = "subjectId")
-    private Subject subject;
+    @ManyToOne @JoinColumn(name = "assignmentId")
+    private Assignment assignment;
 
 }

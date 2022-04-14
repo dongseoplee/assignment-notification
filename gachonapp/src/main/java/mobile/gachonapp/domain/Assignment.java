@@ -15,10 +15,11 @@ public class Assignment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String assignmentName;
-
     private LocalDateTime time;
+
+    @OneToMany(mappedBy = "assignment")
+    private List<UserAssignment> userAssignments = new ArrayList<>();
 
     @ManyToOne @JoinColumn(name = "subjectId")
     private Subject subject;
