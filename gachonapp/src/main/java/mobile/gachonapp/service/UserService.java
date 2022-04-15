@@ -2,35 +2,38 @@ package mobile.gachonapp.service;
 
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import mobile.gachonapp.crawling.Crawling;
 import mobile.gachonapp.domain.User;
-import mobile.gachonapp.dto.UserLoginDTO;
+import mobile.gachonapp.dto.UserLoginRequest;
 import mobile.gachonapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.Map;
 
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
 
-    public Map<String, String> loginUser(UserLoginDTO userLoginDTO) throws IOException {
+    public String loginUser(UserLoginRequest userLoginRequest) throws IOException {
+
+        User user = userLoginRequest.toEntity();
 
         Crawling crawling = new Crawling();
+        String session = crawling.checkLogin(user.getUserId(), user.getPassword());
+        user.setSession(session);
 
-        //가천 서버로부터 받은 세션 저장
-        Map<String, String> session = crawling.checkLogin(userLoginDTO.getUserId(), userLoginDTO.getPassword());
-
-        //새로운 사용자면 데이터베이스에 등록
-        /*if(userRepository.findByUserId(userLoginDTO.getUserId()) == null){
-            userRepository.save(userLoginDTO.toEntity());
-        }*/
-
+        //새로운 사용자 일시
+        if(userRepository.findByUserId(user.getUserId()).isEmpty()){
+            userRepository.save(user);
+            return session;
+        }
+        //기존 사용자는 session update
+        userRepository.updateSession(user);
         return session;
     }
 

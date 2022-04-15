@@ -1,13 +1,12 @@
 package mobile.gachonapp.dto;
 
 import lombok.Getter;
-import lombok.Setter;
 import mobile.gachonapp.domain.User;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
-public class UserLoginDTO {
+public class UserLoginRequest {
 
     @NotBlank
     private String userId;
@@ -16,9 +15,7 @@ public class UserLoginDTO {
     private String password;
 
     public User toEntity() {
-        return User.builder()
-                .userId(userId)
-                .build();
+        return new User(userId,password);
     }
 
 

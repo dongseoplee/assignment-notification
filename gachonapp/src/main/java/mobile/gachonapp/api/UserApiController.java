@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mobile.gachonapp.api.response.Result;
 import mobile.gachonapp.api.response.SuccessResponse;
-import mobile.gachonapp.dto.UserLoginDTO;
+import mobile.gachonapp.dto.UserLoginRequest;
+import mobile.gachonapp.dto.UserLoginResponse;
 import mobile.gachonapp.service.UserService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,19 +20,13 @@ public class UserApiController {
     private final UserService userService;
 
     @PostMapping("/api/login")
-    public Result< Map<String, String> > login(@RequestBody @Validated UserLoginDTO userLoginDTO) throws IOException {
+    public Result<UserLoginResponse> login(@RequestBody @Validated UserLoginRequest userLoginRequest) throws IOException {
 
-        log.info(userLoginDTO.toString());
-        Map<String, String> session = userService.loginUser(userLoginDTO);
+        String session = userService.loginUser(userLoginRequest);
 
-        return new Result< Map<String, String> >(SuccessResponse.LOGIN_SUCCESS,session);
+        //dto 생성 (생성자를 사용했지만 빌더 패턴 혹은 정적팩토리 고민해볼만하다)
+        UserLoginResponse userLoginResponse = new UserLoginResponse(session);
+        return new Result<>(SuccessResponse.LOGIN_SUCCESS,userLoginResponse);
     }
-
-    /*@GetMapping("/api/member")
-    public List<Member> getMember() throws ExecutionException, InterruptedException {
-        List<Member> members = memberService.findMembers();
-        return members;
-    }*/
-
 
 }

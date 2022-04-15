@@ -59,7 +59,7 @@ public class Crawling {
     }
 
     //세션반환
-    public Map<String,String> checkLogin(String id, String password) throws IOException {
+    public String checkLogin(String id, String password) throws IOException {
 
         Connection.Response loginConnection = Jsoup.connect(loginURL)
                 .data("username", id, "password", password)
@@ -71,7 +71,7 @@ public class Crawling {
             throw new WrongLoginUserException();
         }
 
-        return loginConnection.cookies();
+        return loginConnection.cookies().get("MoodleSession");
     }
 
     private boolean isWrongUser(Connection.Response login) {

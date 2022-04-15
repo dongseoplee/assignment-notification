@@ -20,6 +20,7 @@ public class Subject {
     private String subjectName;
     private String webLink;
 
+
     @OneToMany(mappedBy = "subject")
     private List<Assignment> assignments = new ArrayList<>();
 }

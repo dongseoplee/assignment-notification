@@ -25,6 +25,9 @@ public class Assignment {
     private Subject subject;
 
     @Enumerated(EnumType.STRING)
+    private  AssignmentDeadLineStatus assignmentDeadLineStatus = AssignmentDeadLineStatus.EARLY;
+
+    @Enumerated(EnumType.STRING)
     private AssignmentSubmitStatus assignmentSubmitStatus = AssignmentSubmitStatus.N;
 }
 
