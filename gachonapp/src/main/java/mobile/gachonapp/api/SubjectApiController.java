@@ -3,6 +3,7 @@ package mobile.gachonapp.api;
 import lombok.RequiredArgsConstructor;
 import mobile.gachonapp.api.response.Result;
 import mobile.gachonapp.service.SubjectService;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,7 @@ public class SubjectApiController {
 
 
     @PostMapping("/api/subject/view-status")
-    public Result updateSubjectStatus() {
+    public Result updateSubjectStatus(@CookieValue(name = "MoodleSession") String session) {
 
         //json에서 subjectname 과 상태를 받는다.
         //해당 session으로 사용자 찾고 해당 사용자의 subjectname을 찾아 상태를 바꾼다
