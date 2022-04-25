@@ -24,18 +24,22 @@ public class User {
 
     @Transient
     private String password;
-
-    //세션값 저장 -- 테이블을 분리해야하나??
     private String session;
-
-    @OneToMany(mappedBy = "user")
-    private List<UserAssignment> userAssignments = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private AutoLoginStatus autoLoginStatus = AutoLoginStatus.N;
+
+    @OneToMany(mappedBy = "user")
+    private List<Course> courses = new ArrayList<>();
+
 
     public User(String userId, String password) {
         this.userId = userId;
         this.password = password;
     }
+
+    public void updateSession(String session) {
+        this.session = session;
+    }
+
 }

@@ -1,5 +1,5 @@
 package mobile.gachonapp.domain;
 
-public enum SubjectViewStatus {
+public enum CourseViewStatus {
     TURE,FALSE
 }

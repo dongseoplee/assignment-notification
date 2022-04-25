@@ -27,7 +27,7 @@ public class UserRepository {
         return users.stream().findAny();
     }
 
-    public Optional<User> findByUserSession(String session) {
+    public Optional<User> findBySession(String session) {
         List<User> users = em.createQuery("select m from User m where m.session = :session", User.class)
                 .setParameter("session", session)
                 .getResultList();
@@ -37,8 +37,8 @@ public class UserRepository {
 
 
 
-    public void updateSession(User user) {
+    /*public void updateSession(User user) {
         Optional<User> findUser = findByUserId(user.getUserId());
         findUser.get().setSession(user.getSession());
-    }
+    }*/
 }

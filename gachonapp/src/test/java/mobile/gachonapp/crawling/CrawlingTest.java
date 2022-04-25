@@ -50,10 +50,11 @@ class CrawlingTest {
 
 
     @Test
-    void getCrawledData() {
+    void 로그인통합테스트() throws IOException {
+        Crawling crawling = new Crawling();
+        String session = crawling.checkLogin("jmk7117", "als968574@");
+        crawling.getCrawledData(session);
     }
 
-    @Test
-    void checkLogin() {
-    }
+
 }

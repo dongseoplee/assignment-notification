@@ -14,7 +14,6 @@ public enum ErrorResponse implements Response{
     private final int statusCode;
     private final String message;
 
-
     @Override
     public int getStatusCode() {
         return statusCode;

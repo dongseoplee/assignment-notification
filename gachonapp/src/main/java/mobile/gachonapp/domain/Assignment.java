@@ -18,17 +18,18 @@ public class Assignment {
     private String assignmentName;
     private LocalDateTime time;
 
-    @OneToMany(mappedBy = "assignment")
-    private List<UserAssignment> userAssignments = new ArrayList<>();
-
-    @ManyToOne @JoinColumn(name = "subjectId")
-    private Subject subject;
+    @ManyToOne @JoinColumn(name = "course")
+    private Course course;
 
     @Enumerated(EnumType.STRING)
     private  AssignmentDeadLineStatus assignmentDeadLineStatus = AssignmentDeadLineStatus.EARLY;
 
     @Enumerated(EnumType.STRING)
     private AssignmentSubmitStatus assignmentSubmitStatus = AssignmentSubmitStatus.N;
+
+    public void changeSubmitStatus(AssignmentSubmitStatus assignmentSubmitStatus) {
+        this.assignmentSubmitStatus = assignmentSubmitStatus;
+    }
 }
 
 

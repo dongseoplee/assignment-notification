@@ -7,6 +7,7 @@ import mobile.gachonapp.api.response.SuccessResponse;
 import mobile.gachonapp.dto.UserLoginRequest;
 import mobile.gachonapp.dto.UserLoginResponse;
 import mobile.gachonapp.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,4 +30,16 @@ public class UserApiController {
         return new Result<>(SuccessResponse.LOGIN_SUCCESS,userLoginResponse);
     }
 
+   /* @PostMapping("/api/login2")
+    public ResponseEntity<Result> login2(@RequestBody @Validated UserLoginRequest userLoginRequest) throws IOException {
+
+        String session = userService.loginUser(userLoginRequest);
+
+        //dto 생성 (생성자를 사용했지만 빌더 패턴 혹은 정적팩토리 고민해볼만하다)
+        UserLoginResponse userLoginResponse = new UserLoginResponse(session);
+        return ResponseEntity
+                .ok()
+                .body(new Result<>(SuccessResponse.LOGIN_SUCCESS,userLoginResponse));
+    }
+*/
 }

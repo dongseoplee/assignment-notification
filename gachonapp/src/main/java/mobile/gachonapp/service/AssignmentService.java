@@ -1,35 +1,36 @@
 package mobile.gachonapp.service;
 
 import lombok.RequiredArgsConstructor;
+import mobile.gachonapp.domain.Assignment;
 import mobile.gachonapp.domain.User;
+import mobile.gachonapp.dto.AssignmentResponse;
 import mobile.gachonapp.dto.SubmitStatusRequest;
 import mobile.gachonapp.repository.AssignmentRepository;
 import mobile.gachonapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AssignmentService {
 
     private final UserRepository userRepository;
-    private final AssignmentRepository assignementRepository;
+    private final AssignmentRepository assignmentRepository;
 
     //db에 저장된 asssigment를 가져오는 경우( 크롤링을 새로하지 않는다 )
-    public List<mobile.gachonapp.domain.Assignment> getAssignmentList(String session) {
+    public List<AssignmentResponse> getAssignments(String session) {
 
-        //세션으로 db에서 사용자 아이디 찾기
-        Optional<User> findUser = userRepository.findByUserId(session);
+        //세션으로 db에서 사용자 찾기
+        User findUser = userRepository.findBySession(session).get();
+        List<Assignment> findAssignments = assignmentRepository.findAssignmentsByUserId(findUser.getUserId());
 
-        //TODO optinal 처리 로직 리팩토링 (flatmap 고민)
-        if(findUser.isPresent()) {
-            assignementRepository.findAssignmentList(findUser.get());
-        }
+        return findAssignments.stream()
+                .map(AssignmentResponse::createResponse)
+                .collect(Collectors.toList());
 
-        return new ArrayList<>();
     }
 
     // 크롤링을 새로해서 가져오는 경우 - 새로고침 - (세션이 만료되었을때 처리 로직을 고민해야한다.)
@@ -41,12 +42,12 @@ public class AssignmentService {
 
     }*/
 
+    public void updateSubmitStats(String session,SubmitStatusRequest submitStatusRequest) {
 
-    //도메인을 반환하고 컨트롤러에서 변환
-    //과제 제출여부는 영속상태에서 변경감지를 통해 변환(changeStatus?)
-    //TODO 과제제출여부 api(update)
-    public void updateSubmitStats(SubmitStatusRequest submitStatusRequest) {
-
+        User findUser = userRepository.findBySession(session).get();
+        Assignment findAssignment = assignmentRepository.findByUserIdAndAssignmentName(findUser.getUserId(),
+                submitStatusRequest.getAssignmentName()).get();
+        findAssignment.changeSubmitStatus(submitStatusRequest.getAssignmentSubmitStatus());
 
     }
 

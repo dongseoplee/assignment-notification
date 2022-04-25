@@ -19,11 +19,11 @@ public class Crawling {
     private static final String loginURL = "https://cyber.gachon.ac.kr/login/index.php";
     private static final String parsingURL = "https://cyber.gachon.ac.kr/";
 
-    public void getCrawledData(Map<String,String> cookies) throws IOException {
+    public void getCrawledData(String session) throws IOException {
 
         //로그인 후 사이버 캠퍼스로부터 받은 쿠키(아이디, 비밀번호) 사용한다.
         Document document = Jsoup.connect(parsingURL)
-                .cookies(cookies)
+                .cookie("MoodleSession",session)
                 .timeout(3000)
                 .get();
 
@@ -32,6 +32,9 @@ public class Crawling {
         List<CrawlingSubject> subjectList = new ArrayList<>();
 
         Elements elements = document.select("a.course_link");
+        for (Element element : elements) {
+            System.out.println("element = " + element);
+        }
 
         //Course 클래스에 강의 이름과 URL insert
         for (Element element : elements) {
@@ -48,7 +51,7 @@ public class Crawling {
         for (CrawlingSubject course : subjectList) {
             try {
                 Document document1 = Jsoup.connect(course.getURL())
-                        .cookies(cookies)
+                        .cookie("MoodleSession",session)
                         .timeout(1000)
                         .get();
             } catch (IOException e) {
@@ -58,7 +61,7 @@ public class Crawling {
 
     }
 
-    //세션반환
+    //세션반환  (validateLogin)
     public String checkLogin(String id, String password) throws IOException {
 
         Connection.Response loginConnection = Jsoup.connect(loginURL)

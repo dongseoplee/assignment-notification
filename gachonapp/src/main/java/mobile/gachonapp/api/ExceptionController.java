@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ExceptionController {
 
-
     //로그인시 userId 와 password가 입력되지 않은 경우
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public Result loginValidException(MethodArgumentNotValidException ex) {
