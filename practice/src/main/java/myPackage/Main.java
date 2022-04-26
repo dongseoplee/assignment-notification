@@ -13,6 +13,8 @@ public class Main {
         String loginURL = "https://cyber.gachon.ac.kr/login/index.php";
         String parsingURL = "https://cyber.gachon.ac.kr/";
         String courseViewURL = "https://cyber.gachon.ac.kr/course/view.php?id="; //이 주소 String에 + urlId 추가해서 접속
+        String courseTableViewURL = "https://cyber.gachon.ac.kr/mod/assign/index.php?id="; //이 주소 String에 + urlId 추가해서 접속
+        //과제 전용 주소
         //로그인 지우기!!
         String id = "";
         String password = "";
@@ -54,15 +56,6 @@ public class Main {
         }
 
 
-        //과목이름 url
-        //list  url : 123 , 과목이름: 123 학수번호 : 123
-
-        //for 문
-        //접속해야하는 url + id
-        //assigment
-
-
-
         for (Course course : courseList) {
             System.out.println(course.toString());
 
@@ -76,11 +69,25 @@ public class Main {
         }
 
         List<Assignment> assignmentList = new ArrayList<>();
+        ArrayList<String> title = new ArrayList<>();
+        ArrayList<String> time = new ArrayList<>();
+
         //urlId를 Assginment에 넘겨주는 for문
         for (Course course : courseList) {
-            String urlId = course.getUrlId();
-            Assignment assignment = new Assignment(urlId);
+
+            System.out.println("course: " + course.getURL());
+            Assignment assignment = new Assignment(course.getURL(), id, password);
+            assignmentList.add(assignment);
         }
+
+
+
+        System.out.println(assignmentList);
+        System.out.println(courseList.size());
+
+
+
+
         System.out.println();
         System.out.println("\t" + "!!!!!!!!!!!!!!!!!!!!!Warning!!!!!!!!!!!!!!!!!!!!!!!!");
         System.out.println("\t" + "!!!!!!!                                      !!!!!!!");

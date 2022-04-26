@@ -6,7 +6,7 @@ public class Course {
     private String name;
     private String URL;
     private String urlId;
-    private List<Assignment> assignment;
+
 
 
     public Course(String name, String url) {
