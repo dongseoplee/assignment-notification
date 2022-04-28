@@ -26,15 +26,36 @@ public class Main {
                 .timeout(3000)
                 .execute();
 
+        String connectURL = courseTableViewURL + "74409";
+        Document document = Jsoup.connect(connectURL)
+                .cookies(login.cookies())
+                .timeout(3000)
+                .get();
+
+        ArrayList<String> titleList = new ArrayList<>();
+        ArrayList<String> timeList = new ArrayList<>();
 
 
+        for (int i = 0; i < 10; i++) {
+            Elements elements = document.select("td[class=cell c1]").eq(i);
+            titleList.add(elements.text());
+        }
+        for (int i = 0; i < 10; i++) {
+            Elements elements = document.select("td[class=cell c2]").eq(i);
+            timeList.add(elements.text());
+        }
+
+        System.out.println("title list: " + titleList);
+        System.out.println("time list: " + timeList);
+
+/*
         //로그인 후 사이버 캠퍼스로부터 받은 쿠키(아이디, 비밀번호) 사용한다.
         //document에 저장
         Document document = Jsoup.connect(parsingURL)
                 .cookies(login.cookies())
                 .timeout(3000)
                 .get();
-        //System.out.println(document);
+
 
 
         //수강 강의 리스트 만들어 저장
@@ -86,7 +107,7 @@ public class Main {
         System.out.println(courseList.size());
 
 
-
+*/
 
         System.out.println();
         System.out.println("\t" + "!!!!!!!!!!!!!!!!!!!!!Warning!!!!!!!!!!!!!!!!!!!!!!!!");
