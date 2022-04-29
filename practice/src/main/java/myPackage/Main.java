@@ -12,13 +12,12 @@ public class Main {
     public static void main(String[] args) throws IOException {
         String loginURL = "https://cyber.gachon.ac.kr/login/index.php";
         String parsingURL = "https://cyber.gachon.ac.kr/";
-        String courseViewURL = "https://cyber.gachon.ac.kr/course/view.php?id="; //이 주소 String에 + urlId 추가해서 접속
-        String courseTableViewURL = "https://cyber.gachon.ac.kr/mod/assign/index.php?id="; //이 주소 String에 + urlId 추가해서 접속
+        String crawlingURL = "https://cyber.gachon.ac.kr/mod/assign/index.php?id="; //이 주소 String에 + urlId 추가해서 접속
+        //String courseViewURL = "https://cyber.gachon.ac.kr/course/view.php?id="; //이 주소 String에 + urlId 추가해서 접속
         //과제 전용 주소
         //로그인 지우기!!
         String id = "";
         String password = "";
-
         //로그인 url접속후 html 변수 username, password에 아이디 비밀번호 데이터 전송
         Connection.Response login= Jsoup.connect(loginURL)
                 .data("username",id,"password",password)
@@ -26,29 +25,35 @@ public class Main {
                 .timeout(3000)
                 .execute();
 
-        String connectURL = courseTableViewURL + "74409";
+        //과제 크롤링할 url 접속
+        String connectURL = crawlingURL + "77414";
         Document document = Jsoup.connect(connectURL)
                 .cookies(login.cookies())
                 .timeout(3000)
                 .get();
 
+        //과제 제목, 기한 담을 리스트 생성
         ArrayList<String> titleList = new ArrayList<>();
         ArrayList<String> timeList = new ArrayList<>();
 
 
-        for (int i = 0; i < 10; i++) {
+        //과제 제목 리스트에 담기
+        //i의 범위를 과제 갯수에 맞게 설정하면 좋은데 과제 갯수 파악하는 방법은 고민할거리 - j1 do it-
+        for (int i = 0; i < 50; i++) {
             Elements elements = document.select("td[class=cell c1]").eq(i);
             titleList.add(elements.text());
         }
-        for (int i = 0; i < 10; i++) {
+        //과제 기한 리스트에 담기
+        for (int i = 0; i < 50; i++) {
             Elements elements = document.select("td[class=cell c2]").eq(i);
             timeList.add(elements.text());
         }
 
+        //리스트 출력해서 크롤링 데이터 잘 담겼는지 확인하기
         System.out.println("title list: " + titleList);
         System.out.println("time list: " + timeList);
+        /*
 
-/*
         //로그인 후 사이버 캠퍼스로부터 받은 쿠키(아이디, 비밀번호) 사용한다.
         //document에 저장
         Document document = Jsoup.connect(parsingURL)
