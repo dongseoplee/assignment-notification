@@ -1,19 +1,11 @@
 package myPackage;
 
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Assignment {
     private String assignmentName;
-    private LocalDateTime deadLinetime;
+    private LocalDateTime dueDate;
     private  String assignmentTime;
 
 
@@ -28,7 +20,7 @@ public class Assignment {
 
     @Override
     public String toString() {
-        return "";
+        return "    assignmentName = " + assignmentName + "     assignmentTime = " + assignmentTime;
     }
 
     public String getAssignmentName() {
@@ -47,11 +39,11 @@ public class Assignment {
         this.assignmentTime = assignmentTime;
     }
 
-    public LocalDateTime getDeadLinetime() {
-        return deadLinetime;
+    public LocalDateTime getDueDate() {
+        return dueDate;
     }
 
-    public void setDeadLinetime(LocalDateTime deadLinetime) {
-        this.deadLinetime = deadLinetime;
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
     }
 }

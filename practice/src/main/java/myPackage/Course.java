@@ -1,13 +1,5 @@
 package myPackage;
 
-import org.jsoup.select.Elements;
-
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,21 +8,26 @@ public class Course {
     private String name;
     private String URL;
     private String urlId;
-    //public String assignmentName;
+
 
     List<Assignment> assignmentList = new ArrayList<>();
 
 
     public Course(String courseName, String courseURL) throws IOException {
-        //this.name = getOnlyCourseName(); //this.name = getOnlyCourseName(); 변경해야함
+
         this.name = courseName;
-        String modifiedName = this.name;
-        int idx = modifiedName.indexOf("(");
-        this.name = modifiedName.substring(0, idx - 1); //idx - 1 이유는 '(' 전에 공백 지우기위함
+        getOnlyCourseName();
+
         this.URL = courseURL;
         this.urlId = splitIdOfUrl();
 
 
+    }
+
+    public void getOnlyCourseName() {
+        String modifiedName = this.name;
+        int idx = modifiedName.indexOf("(");
+        this.name = modifiedName.substring(0, idx - 1); //idx - 1 이유는 '(' 전에 공백 지우기위함
     }
 
     public void setAssignmentList(ArrayList<String> tempName, ArrayList<String> tempTime) throws IOException {
@@ -63,27 +60,18 @@ public class Course {
         return urlId;
     }
 
-    //강의이름 학수번호 빼고 only 강의이름만 추출하기
-    //ex) "모바일프로그래밍 (14454_001)" -> "모바일프로그래밍"
-    /* NPE 에러남
-    private String getOnlyCourseName() {
-        String modifiedName = this.name;
-        int idx = modifiedName.indexOf("(");
-        //System.out.println(idx);
-        return modifiedName.substring(0, idx - 1); //idx - 1 이유는 '(' 전에 있는 공백 지우기위함
-    }*/
 
     //url에서 url id 추출
     private String splitIdOfUrl() {
-        String url = this.URL;
+        String url = this.URL; //this.URL을 가지고 id만 뽑아내기
         int idx = url.indexOf("?");
-        return url.substring(idx + 1);
+        return url.substring(idx + 4);
     }
 
 
     @Override
     public String toString() {
-        return "     name = " + name + "    url = " + URL + "   urlId = " + urlId + "   Assignment = " + assignmentList;
+        return "   Assignment = " + assignmentList + "     name = " + name + "    url = " + URL + "   urlId = " + urlId;
 
     }
 }
