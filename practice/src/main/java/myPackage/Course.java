@@ -30,10 +30,10 @@ public class Course {
         this.name = modifiedName.substring(0, idx - 1); //idx - 1 이유는 '(' 전에 공백 지우기위함
     }
 
-    public void setAssignmentList(ArrayList<String> tempName, ArrayList<String> tempTime) throws IOException {
+    public void setAssignmentList(ArrayList<String> tempName, ArrayList<String> tempTime, ArrayList<String> tempSubmitted) throws IOException {
 
         for (int i = 0; i < tempName.size(); i++) {
-            Assignment assignment = new Assignment(tempName.get(i), tempTime.get(i));
+            Assignment assignment = new Assignment(tempName.get(i), tempTime.get(i), tempSubmitted.get(i));
             assignmentList.add(assignment);
         }
 
@@ -71,7 +71,7 @@ public class Course {
 
     @Override
     public String toString() {
-        return "   Assignment = " + assignmentList + "     name = " + name + "    url = " + URL + "   urlId = " + urlId;
+        return  "     name = " + name + "\n   Assignment = " + assignmentList + "\n    url = " + URL + "\n   urlId = " + urlId;
 
     }
 }

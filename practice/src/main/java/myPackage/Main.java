@@ -54,6 +54,7 @@ public class Main {
             //과제 제목, 기한 담을 리스트 생성
             ArrayList<String> titleList = new ArrayList<>();
             ArrayList<String> timeList = new ArrayList<>();
+            ArrayList<String> submittedList = new ArrayList<>();
 
             Elements elementsNum = documentAssignment.select("td[class=cell c1]");
             //System.out.println(elementsNum.size());
@@ -69,9 +70,13 @@ public class Main {
                 Elements elementsTime = documentAssignment.select("td[class=cell c2]").eq(i);
                 timeList.add(elementsTime.text());
             }
+            for (int i = 0; i < numOfAssignment; i++) {
+                Elements elementsSubmitted = documentAssignment.select("td[class=cell c3]").eq(i);
+                submittedList.add(elementsSubmitted.text());
+            }
 
 
-            course.setAssignmentList(titleList, timeList);
+            course.setAssignmentList(titleList, timeList, submittedList);
             courseList.add(course); //데이터 타입: Course (class)
 
             System.out.println(course);
