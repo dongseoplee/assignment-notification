@@ -1,4 +1,4 @@
-package mobile.gachonapp.dto;
+package mobile.gachonapp.domain.dto;
 
 import lombok.Data;
 import mobile.gachonapp.domain.Course;
@@ -14,7 +14,6 @@ public class CourseResponse {
         this.courseName = course.getCourseName();
         this.courseViewStatus = course.getCourseViewStatus();
     }
-
 
     public static CourseResponse createResponse(Course course) {
         return new CourseResponse(course);

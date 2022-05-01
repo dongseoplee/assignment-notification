@@ -18,7 +18,7 @@ public class Assignment {
     private String assignmentName;
     private LocalDateTime time;
 
-    @ManyToOne @JoinColumn(name = "course")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "course")
     private Course course;
 
     @Enumerated(EnumType.STRING)

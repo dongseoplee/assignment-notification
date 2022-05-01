@@ -2,9 +2,8 @@ package mobile.gachonapp.service;
 
 
 import lombok.RequiredArgsConstructor;
-import mobile.gachonapp.crawling.Crawling;
 import mobile.gachonapp.domain.User;
-import mobile.gachonapp.dto.UserLoginRequest;
+import mobile.gachonapp.domain.dto.UserLoginRequest;
 import mobile.gachonapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,18 +18,16 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CrawlingService crawlingService;
 
-    //TODO 크롤링 -> 크롤링서비스
-    //TODO
-    //TODO if문 리팩토링
     public String loginUser(UserLoginRequest userLoginRequest) throws IOException {
 
         User user = userLoginRequest.toEntity();
-        
-        //가천서버 로그인
-        Crawling crawling = new Crawling();
-        String session = crawling.checkLogin(user.getUserId(), user.getPassword());
+
+        //가천서버 로그인 성공시 세션발급
+        String session = crawlingService.checkLogin(user.getUserId(), user.getPassword());
         user.setSession(session);
+
         Optional<User> findUser = userRepository.findByUserId(user.getUserId());
 
         //기존 사용자는 db에 session을 update
@@ -39,18 +36,6 @@ public class UserService {
                 ()->userRepository.save(user));
 
         return session;
-
-
-
-        /*if (findUser.isPresent()) {
-            findUser.get().updateSession(session);
-        }
-
-        if(findUser.isEmpty()) {
-            userRepository.save(user);
-        }*/
-
-
     }
 
     /*

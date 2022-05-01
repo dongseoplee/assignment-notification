@@ -3,8 +3,8 @@ package mobile.gachonapp.api;
 import lombok.RequiredArgsConstructor;
 import mobile.gachonapp.api.response.Result;
 import mobile.gachonapp.api.response.SuccessResponse;
-import mobile.gachonapp.dto.CourseResponse;
-import mobile.gachonapp.dto.CourseStatusRequest;
+import mobile.gachonapp.domain.dto.CourseResponse;
+import mobile.gachonapp.domain.dto.CourseStatusRequest;
 import mobile.gachonapp.service.CourseService;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +19,13 @@ public class CourseApiController {
 
     private CourseService courseService;
 
-    @GetMapping("/api/subject/course")
+    @GetMapping("/api/course/")
     public Result getAssignments(@CookieValue(name = "MoodleSession") String session) {
-        List<CourseResponse> courseResponses = courseService.getCourse(session);
+        List<CourseResponse> courseResponses = courseService.getCourses(session);
         return new Result(SuccessResponse.ASSIGNMENT_LIST_SUCCESS,courseResponses);
     }
 
-    @PostMapping("/api/subject/view-status")
+    @PostMapping("/api/course/view-status")
     public Result updateSubjectStatus(@CookieValue(name = "MoodleSession") String session,
                                       List<CourseStatusRequest> courseStatusRequests) {
 

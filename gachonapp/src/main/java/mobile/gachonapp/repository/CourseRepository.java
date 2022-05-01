@@ -13,11 +13,11 @@ public class CourseRepository {
     @PersistenceContext
     private EntityManager em;
 
-
-    //view 상태 걸러서 가져와라
-    public List<Course> findByUserId(String userId) {
-        List<Course> courses = (List<Course>) em.createQuery("select m from Course m join");
-        return courses;
+    public List<Course> findCoursesByUserId(String userId) {
+        return em.createQuery("select m from Course m " +
+                "where m.user.userId = :userId", Course.class)
+                .setParameter("userId",userId)
+                .getResultList();
     }
 
     public List<Course> findByUserIdAndCourseName(String userId, String courseName) {

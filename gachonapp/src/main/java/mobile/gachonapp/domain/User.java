@@ -32,7 +32,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Course> courses = new ArrayList<>();
 
-
     public User(String userId, String password) {
         this.userId = userId;
         this.password = password;

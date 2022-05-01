@@ -1,9 +1,10 @@
 package mobile.gachonapp.domain;
 
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import mobile.gachonapp.dto.CourseStatusRequest;
+import mobile.gachonapp.domain.dto.CourseStatusRequest;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,13 +23,21 @@ public class Course {
     private String courseName;
     private String professorName;
     private String webLink;
-    private CourseViewStatus courseViewStatus = CourseViewStatus.TURE;
+    private CourseViewStatus courseViewStatus = CourseViewStatus.TRUE;
 
-    @ManyToOne @JoinColumn(name = "user")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "user")
     private User user;
 
     @OneToMany(mappedBy = "course")
     private List<Assignment> assignments = new ArrayList();
+
+    public Course() {
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        user.getCourses().add(this);
+    }
 
     public void changeViewStatus(CourseViewStatus courseViewStatus) {
         this.courseViewStatus = courseViewStatus;

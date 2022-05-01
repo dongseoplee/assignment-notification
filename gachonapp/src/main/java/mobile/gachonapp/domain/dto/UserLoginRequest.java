@@ -1,4 +1,4 @@
-package mobile.gachonapp.dto;
+package mobile.gachonapp.domain.dto;
 
 import lombok.Getter;
 import mobile.gachonapp.domain.User;
