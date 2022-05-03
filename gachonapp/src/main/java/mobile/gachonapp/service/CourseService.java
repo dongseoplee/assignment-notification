@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,23 +20,28 @@ import java.util.stream.Collectors;
 public class CourseService {
 
     private final CourseRepository courseRepository;
-    private final UserRepository UserRepository;
+    private final UserRepository userRepository;
 
     //
     public List<CourseResponse> getCourses(String session) {
-        User findUser = UserRepository.findBySession(session).get();
-        List<Course> findCourses = courseRepository.findCoursesByUserId(findUser.getUserId());
+        User findUser = userRepository.findBySession(session)
+                .orElseThrow(NoSuchElementException::new);
+
+        List<Course> findCourses = courseRepository.findByUserId(findUser.getUserId());
+
         return findCourses.stream()
                 .map(CourseResponse::createResponse)
                 .collect(Collectors.toList());
     }
 
     public void updateCourseStatus(String session, List<CourseStatusRequest> courseStatusRequests) {
-        User findUser = UserRepository.findBySession(session).get();
-        List<Course> findCourses = courseRepository.findCoursesByUserId(findUser.getUserId());
+        User findUser = userRepository.findBySession(session).get();
+        List<Course> findCourses = courseRepository.findByUserId(findUser.getUserId());
         updateViewStatuses(findCourses, courseStatusRequests);
     }
 
+
+    //for문 리팩토링
     private void updateViewStatuses(List<Course> findCourses, List<CourseStatusRequest> courseStatusRequests) {
         for (Course course : findCourses) {
             for (CourseStatusRequest courseStatusRequest : courseStatusRequests) {

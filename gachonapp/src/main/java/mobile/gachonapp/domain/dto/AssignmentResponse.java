@@ -9,13 +9,11 @@ import java.time.LocalDateTime;
 public class AssignmentResponse {
     String courseName;
     String assignmentName;
-    String professorName;
     LocalDateTime time;
 
-    private AssignmentResponse(String courseName, String assignmentName, String professorName, LocalDateTime time) {
+    private AssignmentResponse(String courseName, String assignmentName, LocalDateTime time) {
         this.courseName = courseName;
         this.assignmentName = assignmentName;
-        this.professorName = professorName;
         this.time = time;
     }
 
@@ -23,8 +21,7 @@ public class AssignmentResponse {
         return new AssignmentResponse(
                 assignment.getCourse().getCourseName(),
                 assignment.getAssignmentName(),
-                assignment.getCourse().getProfessorName(),
-                assignment.getTime());
+                assignment.getDeadLine());
     }
 
 }

@@ -23,11 +23,25 @@ public class AssignmentApiController {
         return new Result<>(SuccessResponse.ASSIGNMENT_LIST_SUCCESS,assignmentResponses);
     }
 
+    @GetMapping("/api/assignment/submit-list")
+    public Result getSubmittedAssignment(@CookieValue(name = "MoodleSession") String session){
+        List<AssignmentResponse> assignmentResponses = assignmentService.getSubmittedAssignments(session);
+        return new Result<>(SuccessResponse.ASSIGNMENT_SUBMIT_SUCCESS,assignmentResponses);
+    }
+
+    @GetMapping("/api/assignment/notsubmit-list")
+    public Result getNotSubmittedAssignment(@CookieValue(name = "MoodleSession") String session){
+        List<AssignmentResponse> assignmentResponses = assignmentService.getNotSubmittedAssignments(session);
+        return new Result<>(SuccessResponse.ASSIGNMENT_NOTSUBMIT_SUCCESS,assignmentResponses);
+    }
+
+
+
     @PostMapping("/api/assignment/submit-status")
     public Result updateAssignmentSubmitStatus(
             @CookieValue(name = "MoodleSession") String session,
             @RequestBody SubmitStatusRequest submitStatusRequest) {
         assignmentService.updateSubmitStats(session,submitStatusRequest);
-        return new Result<>(SuccessResponse.ASSIGNMENT_LIST_SUCCESS,null);
+        return new Result<>(SuccessResponse.ASSIGNMENT_SUBMIT_SUCCESS,null);
     }
 }

@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum SuccessResponse implements Response {
     LOGIN_SUCCESS(200,"로그인_성공"),
-    ASSIGNMENT_LIST_SUCCESS(200,"과제_리스트_성공");
+    ASSIGNMENT_LIST_SUCCESS(200,"과제_리스트_성공"),
+    ASSIGNMENT_SUBMIT_SUCCESS(200,"제출된_과제_성공"),
+    ASSIGNMENT_NOTSUBMIT_SUCCESS(200,"제출되지않은_과제_성공");
 
     private final int statusCode;
     private final String message;

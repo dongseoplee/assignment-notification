@@ -1,7 +1,6 @@
-package mobile.gachonapp.api.custom_exception;
+package mobile.gachonapp.exception;
 
 import java.io.Serializable;
 
 public class WrongLoginUserException extends RuntimeException implements Serializable {
-
 }

@@ -31,7 +31,7 @@ public class UserService {
         Optional<User> findUser = userRepository.findByUserId(user.getUserId());
 
         //기존 사용자는 db에 session을 update
-        //로그인한 사용자가 앱에 처음 로그인한 사용자 일시 db에 등록
+        //로그인한 사용자가 앱에 처음 로그인한 사용자 일시 사용자를 db에 등록
         findUser.ifPresentOrElse(m -> m.updateSession(session),
                 ()->userRepository.save(user));
 

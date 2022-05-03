@@ -17,9 +17,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseApiController {
 
-    private CourseService courseService;
+    private final CourseService courseService;
 
-    @GetMapping("/api/course/")
+    @GetMapping("/api/course")
     public Result getAssignments(@CookieValue(name = "MoodleSession") String session) {
         List<CourseResponse> courseResponses = courseService.getCourses(session);
         return new Result(SuccessResponse.ASSIGNMENT_LIST_SUCCESS,courseResponses);

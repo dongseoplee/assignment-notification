@@ -1,9 +1,10 @@
 package mobile.gachonapp.crawling;
 
 import lombok.extern.slf4j.Slf4j;
-import mobile.gachonapp.api.custom_exception.SessionExpiredException;
-import mobile.gachonapp.api.custom_exception.WrongLoginUserException;
-import mobile.gachonapp.domain.Assignment;
+import mobile.gachonapp.domain.Course;
+import mobile.gachonapp.exception.ConnectionTimeoutException;
+import mobile.gachonapp.exception.SessionExpiredException;
+import mobile.gachonapp.exception.WrongLoginUserException;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,39 +14,26 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class Crawling {
 
-    private CrawlingCourse course;
     private static final String loginURL = "https://cyber.gachon.ac.kr/login/index.php";
     private static final String parsingURL = "https://cyber.gachon.ac.kr/";
     private String crawlingURL = "https://cyber.gachon.ac.kr/mod/assign/index.php?id=";
 
-    private String id = "";
-    private String password = "";
+    public List<Course> getCrawledAssignments(String session) {
 
-    public List<Assignment> getCrawledAssignments(String session) {
-
-        //로그인 후 사이버 캠퍼스로부터 받은 쿠키(아이디, 비밀번호) 사용한다.
-        Document document = null;
-        try {
-            document = Jsoup.connect(parsingURL)
-                    .cookie("MoodleSession",session)
-                    .timeout(3000)
-                    .get();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        //사이버캠퍼스 로그인 후 첫 페이지 document
+        Document document = getDocument(session,parsingURL);
 
         //만료된 세션 사용시 가천서버에서 로그인페이지로 강제이동 -> 해당페이지에
         // (class name = "html_login") 존재하므로 true이면 세션만료이다.
-        if (document.html().contains("html_login")) {
-            throw new SessionExpiredException();
-        }
+        sessionCheck(document);
 
-        //수강 강의 리스트 만들어 저장
         List<CrawlingCourse> courses = new ArrayList<>();
+
         Elements elements = document.select("a.course_link");
 
         for (Element element : elements) {
@@ -54,51 +42,51 @@ public class Crawling {
             String courseURL = element.attr("abs:href");
 
             CrawlingCourse course = new CrawlingCourse(courseName, courseURL); //강의 이름 url 과제제목 기한 넘겨주기
-            String urlID = course.getUrlId();
-
-            courses.add(course); //데이터 타입: Course (class)
-            String connectURL = crawlingURL + urlID;
-
-            Document documentAssignment = null;
-            try {
-                documentAssignment = Jsoup.connect(connectURL)
-                        .cookie("MoodleSession",session)
-                        .timeout(3000)
-                        .get();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            //과제 제목, 기한 담을 리스트 생성
-            ArrayList<String> titleList = new ArrayList<>();
-            ArrayList<String> timeList = new ArrayList<>();
-            ArrayList<String> submittedList = new ArrayList<>();
-
-            Elements elementsNum = documentAssignment.select("td[class=cell c1]");
-            //System.out.println(elementsNum.size());
-
-            int numOfAssignment = elementsNum.size();
-            for (int i = 0; i < numOfAssignment; i++) {
-                Elements elementsTitle = documentAssignment.select("td[class=cell c1]").eq(i);
-                titleList.add(elementsTitle.text());
-            }
-            //과제 기한 리스트에 담기
-            for (int i = 0; i < numOfAssignment; i++) {
-                Elements elementsTime = documentAssignment.select("td[class=cell c2]").eq(i);
-                timeList.add(elementsTime.text());
-            }
-
-            for (int i = 0; i < numOfAssignment; i++) {
-                Elements elementsSubmitted = documentAssignment.select("td[class=cell c3]").eq(i);
-                submittedList.add(elementsSubmitted.text());
-            }
-
-            course.setAssignmentList(titleList, timeList, submittedList);
             courses.add(course);
-            log.info(String.valueOf(course));
-        }
-        return new ArrayList<>();
 
+            //과목 url
+            String connectURL = crawlingURL + course.getUrlId();
+
+            //과목 document
+            Document documentAssignment = getDocument(session, connectURL);
+            Elements CourseElements = documentAssignment.select("td[class=cell c1]");
+
+            int coursesSize = CourseElements.size();
+            List<CrawlingAssignment> crawlingAssignments = new ArrayList<>(coursesSize);
+
+            for (int i = 0; i<coursesSize; i++) {
+                String name = documentAssignment.select("td[class=cell c1]").eq(i).text();
+                String time = documentAssignment.select("td[class=cell c2]").eq(i).text();
+                String submitStatus = documentAssignment.select("td[class=cell c3]").eq(i).text();
+                CrawlingAssignment assignment = CrawlingAssignment.createAssignment(name, time, submitStatus);
+                crawlingAssignments.add(assignment);
+            }
+
+            course.setAssignments(crawlingAssignments);
+
+        }
+        return courses.stream()
+                .map(CrawlingCourse::toEntity)
+                .collect(Collectors.toList());
+    }
+
+    private void sessionCheck(Document document) {
+        if (document.html().contains("html_login")) {
+            throw new SessionExpiredException();
+        }
+    }
+
+    private Document getDocument(String session, String parsingURL) {
+        Document document = null;
+        try {
+            document = Jsoup.connect(parsingURL)
+                    .cookie("MoodleSession", session)
+                    .timeout(3000)
+                    .get();
+        } catch (IOException e) {
+            throw new ConnectionTimeoutException();
+        }
+        return document;
     }
 
     //세션반환  (validateLogin)

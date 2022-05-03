@@ -1,7 +1,8 @@
 package mobile.gachonapp.crawling;
 
-import mobile.gachonapp.api.custom_exception.SessionExpiredException;
-import mobile.gachonapp.api.custom_exception.WrongLoginUserException;
+
+import mobile.gachonapp.exception.SessionExpiredException;
+import mobile.gachonapp.exception.WrongLoginUserException;
 import org.assertj.core.api.Assertions;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -58,6 +59,7 @@ class CrawlingTest {
         Crawling crawling = new Crawling();
         String session = crawling.checkLogin("jmk7117", "als968574@");
         crawling.getCrawledAssignments(session);
+
     }
 
     @Test
