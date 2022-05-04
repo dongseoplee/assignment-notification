@@ -7,6 +7,7 @@ import mobile.gachonapp.domain.Course;
 import mobile.gachonapp.domain.User;
 import mobile.gachonapp.domain.dto.AssignmentResponse;
 import mobile.gachonapp.domain.dto.SubmitStatusRequest;
+import mobile.gachonapp.exception.NotFindSessionException;
 import mobile.gachonapp.repository.AssignmentRepository;
 import mobile.gachonapp.repository.CourseRepository;
 import mobile.gachonapp.repository.UserRepository;
@@ -61,7 +62,7 @@ public class AssignmentService {
     // 세션만료가 아니면 기존 세션으로 크롤링
     public List<AssignmentResponse> refreshAssignments(String session) {
         User findUser = userRepository.findBySession(session)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NotFindSessionException::new);
 
         List<Course> CrawledCourses = crawlingService.crawlAssignments(session);
         List<Assignment> findCourse = assignmentRepository.findByUserId(findUser.getUserId());
@@ -77,7 +78,7 @@ public class AssignmentService {
 
     public List<AssignmentResponse> getSubmittedAssignments(String session) {
         User findUser = userRepository.findBySession(session)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NotFindSessionException::new);
         List<Assignment> findAssignment = assignmentRepository.findSubmitByUserId(findUser.getUserId());
         return findAssignment.stream()
                 .map(AssignmentResponse::createResponse)
@@ -86,7 +87,7 @@ public class AssignmentService {
 
     public List<AssignmentResponse> getNotSubmittedAssignments(String session) {
         User findUser = userRepository.findBySession(session)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NotFindSessionException::new);
 
         List<Assignment> findAssignment = assignmentRepository.findNotSubmitByUserId(findUser.getUserId());
         return findAssignment.stream()

@@ -2,7 +2,7 @@ package mobile.gachonapp.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mobile.gachonapp.api.response.Result;
+import mobile.gachonapp.api.response.ResultSuccess;
 import mobile.gachonapp.api.response.SuccessResponse;
 import mobile.gachonapp.domain.dto.UserLoginRequest;
 import mobile.gachonapp.domain.dto.UserLoginResponse;
@@ -21,9 +21,9 @@ public class UserApiController {
 
 
     @PostMapping("/api/login")
-    public Result<UserLoginResponse> login(@RequestBody @Validated UserLoginRequest userLoginRequest) throws IOException {
+    public ResultSuccess<UserLoginResponse> login(@RequestBody @Validated UserLoginRequest userLoginRequest) throws IOException {
         String session = userService.loginUser(userLoginRequest);
         UserLoginResponse userLoginResponse = new UserLoginResponse(session);
-        return new Result<>(SuccessResponse.LOGIN_SUCCESS,userLoginResponse);
+        return new ResultSuccess<>(SuccessResponse.LOGIN_SUCCESS,userLoginResponse);
     }
 }

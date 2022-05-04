@@ -1,7 +1,7 @@
 package mobile.gachonapp.api;
 
 import lombok.RequiredArgsConstructor;
-import mobile.gachonapp.api.response.Result;
+import mobile.gachonapp.api.response.ResultSuccess;
 import mobile.gachonapp.api.response.SuccessResponse;
 import mobile.gachonapp.domain.dto.CourseResponse;
 import mobile.gachonapp.domain.dto.CourseStatusRequest;
@@ -20,14 +20,14 @@ public class CourseApiController {
     private final CourseService courseService;
 
     @GetMapping("/api/course")
-    public Result getAssignments(@CookieValue(name = "MoodleSession") String session) {
+    public ResultSuccess getAssignments(@CookieValue(name = "MoodleSession") String session) {
         List<CourseResponse> courseResponses = courseService.getCourses(session);
-        return new Result(SuccessResponse.ASSIGNMENT_LIST_SUCCESS,courseResponses);
+        return new ResultSuccess(SuccessResponse.ASSIGNMENT_LIST_SUCCESS,courseResponses);
     }
 
     @PostMapping("/api/course/view-status")
-    public Result updateSubjectStatus(@CookieValue(name = "MoodleSession") String session,
-                                      List<CourseStatusRequest> courseStatusRequests) {
+    public ResultSuccess updateSubjectStatus(@CookieValue(name = "MoodleSession") String session,
+                                             List<CourseStatusRequest> courseStatusRequests) {
 
         courseService.updateCourseStatus(session, courseStatusRequests);
         //json에서 subjectname 과 상태를 받는다.

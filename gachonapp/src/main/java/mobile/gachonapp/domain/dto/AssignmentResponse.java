@@ -1,6 +1,7 @@
 package mobile.gachonapp.domain.dto;
 
 import lombok.Data;
+import lombok.Getter;
 import mobile.gachonapp.domain.Assignment;
 
 import java.time.LocalDateTime;
@@ -23,5 +24,6 @@ public class AssignmentResponse {
                 assignment.getAssignmentName(),
                 assignment.getDeadLine());
     }
+
 
 }
