@@ -24,9 +24,9 @@ public class CourseService {
     private final UserRepository userRepository;
 
     //
-    public List<CourseResponse> getCourses(String session) {
-        User findUser = userRepository.findBySession(session)
-                .orElseThrow(NotFindSessionException::new);
+    public List<CourseResponse> getCourses(String userId) {
+        User findUser = userRepository.findByUserId(userId)
+                .orElseThrow(NoSuchElementException::new);
 
         List<Course> findCourses = courseRepository.findByUserId(findUser.getUserId());
 
@@ -35,8 +35,9 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
-    public void updateCourseStatus(String session, List<CourseStatusRequest> courseStatusRequests) {
-        User findUser = userRepository.findBySession(session).get();
+    public void updateCourseStatus(String userId, List<CourseStatusRequest> courseStatusRequests) {
+        User findUser = userRepository.findByUserId(userId)
+                .orElseThrow(NoSuchElementException::new);
         List<Course> findCourses = courseRepository.findByUserId(findUser.getUserId());
         updateViewStatuses(findCourses, courseStatusRequests);
     }

@@ -31,11 +31,11 @@ public class AssignmentService {
     private final CrawlingService crawlingService;
 
 
-    public List<AssignmentResponse> getAssignments(String session) {
+    public List<AssignmentResponse> getAssignments(String userId) {
 
-        User findUser = userRepository.findBySession(session)
+        User findUser = userRepository.findByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);
-        List<Course> CrawledCourses = crawlingService.crawlAssignments(session);
+        List<Course> CrawledCourses = crawlingService.crawlAssignments(findUser.getSession());
 
 
         //처음사용자 -> 처음사용자는 course가 비어있다
@@ -62,7 +62,7 @@ public class AssignmentService {
     // 세션만료가 아니면 기존 세션으로 크롤링
     public List<AssignmentResponse> refreshAssignments(String session) {
         User findUser = userRepository.findBySession(session)
-                .orElseThrow(NotFindSessionException::new);
+                .orElseThrow(NoSuchElementException::new);
 
         List<Course> CrawledCourses = crawlingService.crawlAssignments(session);
         List<Assignment> findCourse = assignmentRepository.findByUserId(findUser.getUserId());
@@ -76,18 +76,18 @@ public class AssignmentService {
 
     }
 
-    public List<AssignmentResponse> getSubmittedAssignments(String session) {
-        User findUser = userRepository.findBySession(session)
-                .orElseThrow(NotFindSessionException::new);
+    public List<AssignmentResponse> getSubmittedAssignments(String userId) {
+        User findUser = userRepository.findByUserId(userId)
+                .orElseThrow(NoSuchElementException::new);
         List<Assignment> findAssignment = assignmentRepository.findSubmitByUserId(findUser.getUserId());
         return findAssignment.stream()
                 .map(AssignmentResponse::createResponse)
                 .collect(Collectors.toList());
     }
 
-    public List<AssignmentResponse> getNotSubmittedAssignments(String session) {
-        User findUser = userRepository.findBySession(session)
-                .orElseThrow(NotFindSessionException::new);
+    public List<AssignmentResponse> getNotSubmittedAssignments(String userId) {
+        User findUser = userRepository.findByUserId(userId)
+                .orElseThrow(NoSuchElementException::new);
 
         List<Assignment> findAssignment = assignmentRepository.findNotSubmitByUserId(findUser.getUserId());
         return findAssignment.stream()
@@ -95,7 +95,7 @@ public class AssignmentService {
                 .collect(Collectors.toList());
     }
 
-    public void updateSubmitStats(String session, SubmitStatusRequest submitStatusRequest) {
+    /*public void updateSubmitStats(String session, SubmitStatusRequest submitStatusRequest) {
 
         User findUser = userRepository.findBySession(session)
                 .orElseThrow(NoSuchElementException::new);
@@ -105,7 +105,7 @@ public class AssignmentService {
 
         findAssignment.changeSubmitStatus(submitStatusRequest.getAssignmentSubmitStatus());
 
-    }
+    }*/
 
 
 }

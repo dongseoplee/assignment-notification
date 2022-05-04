@@ -21,30 +21,30 @@ public class AssignmentApiController {
     private final AssignmentService assignmentService;
 
     @GetMapping("/api/assignment/list")
-    public ResultSuccess getAssignments(@CookieValue(name = "MoodleSession") String session){
-        List<AssignmentResponse> assignmentResponses = assignmentService.getAssignments(session);
+    public ResultSuccess getAssignments(@RequestAttribute User user){
+        List<AssignmentResponse> assignmentResponses = assignmentService.getAssignments(user.getUserId());
         return new ResultSuccess<>(SuccessResponse.ASSIGNMENT_LIST_SUCCESS,assignmentResponses);
     }
 
     @GetMapping("/api/assignment/submit-list")
-    public ResultSuccess getSubmittedAssignment(@CookieValue(name = "MoodleSession") String session){
-        List<AssignmentResponse> assignmentResponses = assignmentService.getSubmittedAssignments(session);
+    public ResultSuccess getSubmittedAssignment(@RequestAttribute User user){
+        List<AssignmentResponse> assignmentResponses = assignmentService.getSubmittedAssignments(user.getUserId());
         return new ResultSuccess<>(SuccessResponse.ASSIGNMENT_SUBMIT_SUCCESS,assignmentResponses);
     }
 
     @GetMapping("/api/assignment/notsubmit-list")
-    public ResultSuccess getNotSubmittedAssignment(@CookieValue(name = "MoodleSession") String session){
-        List<AssignmentResponse> assignmentResponses = assignmentService.getNotSubmittedAssignments(session);
+    public ResultSuccess getNotSubmittedAssignment(@RequestAttribute User user){
+        List<AssignmentResponse> assignmentResponses = assignmentService.getNotSubmittedAssignments(user.getUserId());
         return new ResultSuccess<>(SuccessResponse.ASSIGNMENT_NOTSUBMIT_SUCCESS,assignmentResponses);
     }
 
 
 
-    @PostMapping("/api/assignment/submit-status")
+    /*@PostMapping("/api/assignment/submit-status")
     public ResultSuccess updateAssignmentSubmitStatus(
             @CookieValue(name = "MoodleSession") String session,
             @RequestBody SubmitStatusRequest submitStatusRequest) {
         assignmentService.updateSubmitStats(session,submitStatusRequest);
         return new ResultSuccess<>(SuccessResponse.ASSIGNMENT_SUBMIT_SUCCESS,null);
-    }
+    }*/
 }
