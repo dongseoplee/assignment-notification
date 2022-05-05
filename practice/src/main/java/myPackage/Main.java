@@ -9,10 +9,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 public class Main {
+
+
     public static void main(String[] args) throws IOException {
         String loginURL = "https://cyber.gachon.ac.kr/login/index.php";
         String homeURL = "https://cyber.gachon.ac.kr/";
         String crawlingURL = "https://cyber.gachon.ac.kr/mod/assign/index.php?id=";
+        String privateURL;
+        String studentNumber;
+        String studentDept;
+
+
+
+        List<Course> courseList = new ArrayList<>();
 
         String id = "";
         String password = "";
@@ -28,7 +37,30 @@ public class Main {
                 .timeout(3000)
                 .get();
 
-        List<Course> courseList = new ArrayList<>();
+
+        //학번, 학과 크롤링 시작
+
+        //개인정보수정 URL 크롤링
+        Elements elementPrivateInfo = document.select(".items a").eq(0);
+        privateURL = elementPrivateInfo.first().getElementsByAttribute("href").attr("href");
+
+
+        //개인정보수정 URL 접속
+        Document documentPrivateInfo = Jsoup.connect(privateURL)
+                .cookies(login.cookies())
+                .timeout(3000)
+                .get();
+
+
+        //학번, 학과 크롤링
+        Elements elementsPrivateURL = documentPrivateInfo.select("div.felement.fstatic");
+        studentNumber = elementsPrivateURL.eq(0).text();
+        studentDept = elementsPrivateURL.eq(1).text();
+        System.out.println("학번: " + studentNumber + "       학과: " + studentDept);
+        //학번, 학과 크롤링 종료
+
+
+
         Elements elements = document.select("a.course_link");
 
         for (Element element : elements) {
@@ -93,5 +125,7 @@ public class Main {
         System.out.println("\t" + "!!!!!!!                                      !!!!!!!");
         System.out.println("\t" + "!!!!!!!!!!!!!!!!!!!!!Warning!!!!!!!!!!!!!!!!!!!!!!!!");
     }
+
+
 }
 
