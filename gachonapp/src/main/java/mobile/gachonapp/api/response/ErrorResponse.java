@@ -1,8 +1,8 @@
 package mobile.gachonapp.api.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
-import mobile.gachonapp.exception.NotFindSessionException;
+
 
 @AllArgsConstructor
 public enum ErrorResponse implements Response{

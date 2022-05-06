@@ -17,14 +17,14 @@ public class AssignmentRepository {
     @PersistenceContext
     private EntityManager em;
 
-
-    public Optional<Assignment> findByUserIdAndAssignmentName(String findUserId, String courseName) {
-        List<Assignment> assignments = (List<Assignment>) em.createQuery("select");
-        return assignments.stream().findAny();
+    public List<Assignment> findByUserId(String userId) {
+        return em.createQuery("select a from Assignment a where a.user.userId =: userId")
+                .setParameter("userId",userId)
+                .getResultList();
     }
 
     //제출하지 않은 과목
-    public List<Assignment> findByUserId(String userId) {
+    public List<Assignment> findToBeSubmitByUserId(String userId) {
 
         //assignment dead line : EARLY (제출기한이 지나지 않은 과목)
         //assignment submit Staus: N (제출하지 않은 과목)

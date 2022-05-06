@@ -6,17 +6,15 @@ import mobile.gachonapp.domain.Assignment;
 import mobile.gachonapp.domain.Course;
 import mobile.gachonapp.domain.User;
 import mobile.gachonapp.domain.dto.AssignmentResponse;
-import mobile.gachonapp.domain.dto.SubmitStatusRequest;
-import mobile.gachonapp.exception.NotFindSessionException;
 import mobile.gachonapp.repository.AssignmentRepository;
 import mobile.gachonapp.repository.CourseRepository;
 import mobile.gachonapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,23 +33,41 @@ public class AssignmentService {
 
         User findUser = userRepository.findByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);
-        List<Course> CrawledCourses = crawlingService.crawlAssignments(findUser.getSession());
-
+        List<Course> crawledCourses = crawlingService.crawlAssignments(findUser.getSession());
 
         //처음사용자 -> 처음사용자는 course가 비어있다
         if (findUser.getCourses().isEmpty()) {
             //연관관계 매핑
-            for (Course crawledCourse : CrawledCourses) {
+            for (Course crawledCourse : crawledCourses) {
                 crawledCourse.setUser(findUser);
+                for (Assignment assignment : crawledCourse.getAssignments()) {
+                    assignment.setUser(findUser);
+                }
             }
-            courseRepository.saveAll(CrawledCourses);
+            courseRepository.saveAll(crawledCourses);
         }
+
+        List<Assignment> findAssignments = assignmentRepository.findByUserId(userId);
+        List<Assignment> crawledAssignments = new ArrayList<>();
+
         //리스트 비교후 업데이트 로직
-        //if()
+        for (Course crawledCours : crawledCourses) {
+            for (Assignment assignment : crawledCours.getAssignments()) {
+                crawledAssignments.add(assignment);
+            }
+        }
 
-        List<Assignment> findAssignments = assignmentRepository.findByUserId(findUser.getUserId());
+        System.out.println("findAssignments.size() = " + findAssignments.size());
+        for(int i = 0 ; i < findAssignments.size(); i++) {
+            System.out.println("findAssignments = " + findAssignments.get(i).getAssignmentName());
+            System.out.println("crawledAssignments = " + crawledAssignments.get(i).getAssignmentName());
+        }
 
-        return findAssignments.stream()
+
+        //if()findAssignment crawledAssignments
+        List<Assignment> toBeSubmittedAssignments = assignmentRepository.findToBeSubmitByUserId(findUser.getUserId());
+
+        return toBeSubmittedAssignments.stream()
                 .map(AssignmentResponse::createResponse)
                 .collect(Collectors.toList());
     }
@@ -65,7 +81,7 @@ public class AssignmentService {
                 .orElseThrow(NoSuchElementException::new);
 
         List<Course> CrawledCourses = crawlingService.crawlAssignments(session);
-        List<Assignment> findCourse = assignmentRepository.findByUserId(findUser.getUserId());
+        List<Assignment> findCourse = assignmentRepository.findToBeSubmitByUserId(findUser.getUserId());
         //course 비교  findCourse  == CrawledCourses
 
 

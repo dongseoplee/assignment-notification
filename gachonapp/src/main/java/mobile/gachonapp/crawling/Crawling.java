@@ -30,7 +30,7 @@ public class Crawling {
 
         //만료된 세션 사용시 가천서버에서 로그인페이지로 강제이동 -> 해당페이지에
         // (class name = "html_login") 존재하므로 true이면 세션만료이다.
-        sessionCheck(document);
+        validateSession(document);
 
         List<CrawlingCourse> courses = new ArrayList<>();
 
@@ -41,10 +41,10 @@ public class Crawling {
             String courseName = element.select("h3").text();
             String courseURL = element.attr("abs:href");
 
-            CrawlingCourse course = new CrawlingCourse(courseName, courseURL); //강의 이름 url 과제제목 기한 넘겨주기
+            CrawlingCourse course = new CrawlingCourse(courseName, courseURL);
             courses.add(course);
 
-            //과목 url
+            //Assigment 크롤링 url
             String connectURL = crawlingURL + course.getUrlId();
 
             //과목 document
@@ -70,7 +70,7 @@ public class Crawling {
                 .collect(Collectors.toList());
     }
 
-    private void sessionCheck(Document document) {
+    private void validateSession(Document document) {
         if (document.html().contains("html_login")) {
             throw new SessionExpiredException();
         }
@@ -107,13 +107,41 @@ public class Crawling {
             throw new WrongLoginUserException();
         }
 
+
+
         return loginConnection.cookies().get("MoodleSession");
     }
 
     private boolean isWrongUser(Connection.Response login) {
         return login.body().contains("error_message text-danger");
     }
+
+    public CrawlUser getUserInfo(String session) {
+
+        Document document = getDocument(session, parsingURL);
+        Elements elementPrivateInfo = document.select(".items a").eq(0);
+        String privateURL = elementPrivateInfo.first().getElementsByAttribute("href").attr("href");
+
+        //개인정보수정 URL 접속
+        Document documentPrivateInfo = null;
+        try {
+            documentPrivateInfo = Jsoup.connect(privateURL)
+                    .cookie("MoodleSession", session)
+                    .timeout(3000)
+                    .get();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        //학번, 학과 크롤링
+        Elements elementsPrivateURL = documentPrivateInfo.select("div.felement.fstatic");
+        String studentId = elementsPrivateURL.eq(0).text();
+        String major = elementsPrivateURL.eq(1).text();
+
+        return new CrawlUser(studentId,major);
+    }
 }
+
 
 
 //로그인 성공후 세션발급
@@ -121,3 +149,4 @@ public class Crawling {
 //TODO db에 남아이쓰는 세션(잘못된세션을 보냈을때)으로 가천서버에 api보냈을때 에러처리
 //지난 세션으로 서버에 요청했을때 리턴갑스 ??
 //다시 로그인 해서세션을 새거로 db에 저장해야한다.
+

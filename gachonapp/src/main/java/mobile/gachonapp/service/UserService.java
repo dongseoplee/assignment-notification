@@ -2,6 +2,7 @@ package mobile.gachonapp.service;
 
 
 import lombok.RequiredArgsConstructor;
+import mobile.gachonapp.crawling.CrawlUser;
 import mobile.gachonapp.domain.User;
 import mobile.gachonapp.domain.dto.UserLoginRequest;
 import mobile.gachonapp.repository.UserRepository;
@@ -30,16 +31,21 @@ public class UserService {
 
         Optional<User> findUser = userRepository.findByUserId(user.getUserId());
 
+        CrawlUser crawlUser = crawlingService.getUserInfo(session);
+
         //기존 사용자는 db에 session을 update
         //로그인한 사용자가 앱에 처음 로그인한 사용자 일시 사용자를 db에 등록
         findUser.ifPresentOrElse(m -> m.updateSession(session),
-                ()->userRepository.save(user));
-
+                () -> {
+                    user.setMajor(crawlUser.getMajor());
+                    user.setStudentId(crawlUser.getStudentId());
+                    userRepository.save(user);
+                });
         return session;
     }
 
     /*
-    * */
+     * */
 
     /*
     * //데이터 크롤링해서 가져오기

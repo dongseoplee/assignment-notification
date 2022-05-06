@@ -30,8 +30,8 @@ public class Assignment {
     @Enumerated(EnumType.STRING)
     private AssignmentSubmitStatus assignmentSubmitStatus = AssignmentSubmitStatus.N;
 
-    @LastModifiedDate
-    private LocalDateTime modifiedDate;
+   /* @LastModifiedDate
+    private LocalDateTime modifiedDate;*/
 
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "user")
     private User user;

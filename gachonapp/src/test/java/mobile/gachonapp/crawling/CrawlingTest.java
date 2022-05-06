@@ -70,4 +70,15 @@ class CrawlingTest {
         });
     }
 
+    @Test
+    void 학수번호_가져오기() {
+        //String name = "2022 폭력예방교육 (글로벌 재학생 2학년~5학년)";
+        String name = "소프트웨어공학(1111_11)";
+
+        int idx = name.indexOf("(");
+        int lastIdx = name.indexOf(")");
+        String courseId = name.substring(idx+1, lastIdx);
+
+    }
+
 }

@@ -21,11 +21,9 @@ public class Course {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    //private String courseId;
     private String courseName;
-    //private String professorName;
-    //private String webLink;
+    private String courseId;
+
     @Enumerated(EnumType.STRING)
     private CourseViewStatus courseViewStatus = CourseViewStatus.TRUE;
 
@@ -38,7 +36,8 @@ public class Course {
     protected Course() {
     }
 
-    public Course(String courseName) {
+    public Course(String courseId, String courseName) {
+        this.courseId = courseId;
         this.courseName = courseName;
     }
 

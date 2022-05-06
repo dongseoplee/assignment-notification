@@ -17,16 +17,17 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String userId;
+    @Id
+    private String studentId;
 
+    private String userId;
+    private String major;
     @Transient
     private String password;
     private String session;
 
-    @Enumerated(EnumType.STRING)
-    private AutoLoginStatus autoLoginStatus = AutoLoginStatus.N;
+    /*@Enumerated(EnumType.STRING)
+    private AutoLoginStatus autoLoginStatus = AutoLoginStatus.N;*/
 
     @OneToMany(mappedBy = "user")
     private List<Course> courses = new ArrayList<>();

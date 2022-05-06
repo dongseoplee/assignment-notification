@@ -16,21 +16,37 @@ public class CrawlingCourse {
     private String name;
     private String url;
     private String urlId;
+    private String courseId;
 
     private List<CrawlingAssignment> assignments = new ArrayList<>();
 
 
     public CrawlingCourse(String courseName, String courseURL)  {
         this.name = courseName;
+        this.courseId = getCourseId(courseName);
+
         getOnlyCourseName();
         this.url = courseURL;
         this.urlId = splitIdOfUrl();
+
     }
 
     public void getOnlyCourseName() {
         String modifiedName = this.name;
         int idx = modifiedName.indexOf("(");
         this.name = modifiedName.substring(0, idx - 1); //idx - 1 이유는 '(' 전에 공백 지우기위함
+    }
+
+    public String getCourseId(String courseName) {
+
+        int idx = name.indexOf("(");
+        int lastIdx = name.indexOf(")");
+        String courseId = name.substring(idx+1, lastIdx);
+
+        if (courseId.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*"))
+            return null;
+
+        return courseId;
     }
 
     /*public void setAssignments(ArrayList<String> tempName, ArrayList<String> tempTime, ArrayList<String> tempSubmitted)  {
@@ -48,16 +64,10 @@ public class CrawlingCourse {
         return url.substring(idx + 4);
     }
 
-    @Override
-    public String toString() {
-        return  "     name = " + name + "\n   Assignment = " + assignments + "\n    url = " + url + "\n   urlId = " + urlId;
-
-    }
-
     //name, assignmentList
     public Course toEntity() {
         //Course entity변환
-        Course course = new Course(name);
+        Course course = new Course(courseId,name);
         //AssignmentList entity변환
         List<Assignment> EntityAssignments = assignments.stream()
                 .map(CrawlingAssignment::toEntity)

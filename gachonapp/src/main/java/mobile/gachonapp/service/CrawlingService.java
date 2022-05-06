@@ -1,5 +1,6 @@
 package mobile.gachonapp.service;
 
+import mobile.gachonapp.crawling.CrawlUser;
 import mobile.gachonapp.crawling.Crawling;
 import mobile.gachonapp.domain.Course;
 import org.springframework.stereotype.Service;
@@ -19,4 +20,8 @@ public class CrawlingService {
         return crawling.checkLogin(id,password);
     }
 
+    public CrawlUser getUserInfo(String session) {
+        Crawling crawling = new Crawling();
+        return crawling.getUserInfo(session);
+    }
 }
