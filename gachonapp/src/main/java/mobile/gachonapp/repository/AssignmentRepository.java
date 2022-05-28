@@ -17,6 +17,10 @@ public class AssignmentRepository {
     @PersistenceContext
     private EntityManager em;
 
+    public void save(Assignment assignment) {
+        em.persist(assignment);
+    }
+
     public List<Assignment> findByUserId(String userId) {
         return em.createQuery("select a from Assignment a where a.user.userId =: userId")
                 .setParameter("userId",userId)
@@ -31,11 +35,12 @@ public class AssignmentRepository {
         //과목 볼 여부 Y인애들
         List<Assignment> assignments =
                 em.createQuery("select a from Assignment a " +
-                                "left join User u on u = a.user " +
+                                "left join User u on u.userId =: userId " +
                                 "where a.assignmentDeadLineStatus =: deadLine " +
                                 "and a.assignmentSubmitStatus =: submit " +
                                 "and a.course.courseViewStatus =: view " +
                                 "order by a.deadLine asc ")
+                        .setParameter("userId", userId)
                         .setParameter("deadLine", AssignmentDeadLineStatus.EARLY)
                         .setParameter("submit", AssignmentSubmitStatus.N)
                         .setParameter("view", CourseViewStatus.TRUE)

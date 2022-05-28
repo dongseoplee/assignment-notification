@@ -3,6 +3,7 @@ package mobile.gachonapp.api;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mobile.gachonapp.api.response.NoDataResult;
 import mobile.gachonapp.api.response.Result;
 import mobile.gachonapp.api.response.SuccessResponse;
 import mobile.gachonapp.domain.User;
@@ -37,6 +38,13 @@ public class AssignmentApiController {
         List<AssignmentResponse> assignmentResponses = assignmentService.getNotSubmittedAssignments(user.getUserId());
         return new Result<>(SuccessResponse.ASSIGNMENT_NOTSUBMIT_SUCCESS,assignmentResponses);
     }
+
+    @GetMapping("/api/assignment/refresh")
+    public NoDataResult refreshAssignments (@RequestAttribute User user){
+        assignmentService.refreshAssignments(user.getUserId());
+        return new NoDataResult(SuccessResponse.REFRESH);
+    }
+
 
 
 

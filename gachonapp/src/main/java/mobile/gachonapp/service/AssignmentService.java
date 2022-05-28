@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,38 +34,64 @@ public class AssignmentService {
 
         User findUser = userRepository.findByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);
-        List<Course> crawledCourses = crawlingService.crawlAssignments(findUser.getSession());
 
-        //처음사용자 -> 처음사용자는 course가 비어있다
-        if (findUser.getCourses().isEmpty()) {
-            //연관관계 매핑
-            for (Course crawledCourse : crawledCourses) {
-                crawledCourse.setUser(findUser);
-                for (Assignment assignment : crawledCourse.getAssignments()) {
-                    assignment.setUser(findUser);
-                }
+        /*List<Course> crawledCourses = crawlingService.crawlAssignments(findUser.getSession());
+        List<Assignment> findAssignments = assignmentRepository.findByUserId(userId);*/
+
+        /*//user와 연관관계 매핑
+        for (Course crawledCourse : crawledCourses) {
+            crawledCourse.setUser(findUser);
+            for (Assignment assignment : crawledCourse.getAssignments()) {
+                assignment.setUser(findUser);
             }
-            courseRepository.saveAll(crawledCourses);
         }
 
-        List<Assignment> findAssignments = assignmentRepository.findByUserId(userId);
+        //db에 사용자가 없는 경우
+        if (findAssignments.isEmpty()) {
+            courseRepository.saveAll(crawledCourses);
+            List<Assignment> toBeSubmittedAssignments = assignmentRepository.findToBeSubmitByUserId(findUser.getUserId());
+
+            return toBeSubmittedAssignments.stream()
+                    .map(AssignmentResponse::createResponse)
+                    .collect(Collectors.toList());
+        }
+
+
         List<Assignment> crawledAssignments = new ArrayList<>();
 
-        //리스트 비교후 업데이트 로직
+        //크롤링 assignment을 한 리스트에
         for (Course crawledCours : crawledCourses) {
             for (Assignment assignment : crawledCours.getAssignments()) {
                 crawledAssignments.add(assignment);
             }
         }
 
-        System.out.println("findAssignments.size() = " + findAssignments.size());
-        for(int i = 0 ; i < findAssignments.size(); i++) {
-            System.out.println("findAssignments = " + findAssignments.get(i).getAssignmentName());
-            System.out.println("crawledAssignments = " + crawledAssignments.get(i).getAssignmentName());
+        //추가된 assignment 모으기
+        List<Assignment> addedAssignments = crawledAssignments.stream()
+                .filter(list -> findAssignments.stream().noneMatch( s-> s.getAssignmentName().equals(list.getAssignmentName())))
+                .collect(Collectors.toList());
+
+        for (Assignment addedAssignment : addedAssignments) {
+            System.out.println("addedAssignments = " + addedAssignment.getAssignmentName());
         }
 
+        //추가된게 assignment가 있으면 추가한다.
+        if(!addedAssignments.isEmpty()) {
+            for (Assignment addedAssignment : addedAssignments) {
+                addedAssignment.setUser(findUser);
+                assignmentRepository.save(addedAssignment);
+            }
+        }
 
-        //if()findAssignment crawledAssignments
+        //assignment 내용이 변경된게 있으면 변경한다.
+        for (Assignment findAssignment : findAssignments) {
+            for (Assignment crawledAssignment : crawledAssignments) {
+                if(findAssignment.isSameAssignment(crawledAssignment)) {
+                    findAssignment.updateInfo(crawledAssignment);
+                }
+            }
+        }*/
+
         List<Assignment> toBeSubmittedAssignments = assignmentRepository.findToBeSubmitByUserId(findUser.getUserId());
 
         return toBeSubmittedAssignments.stream()
@@ -76,20 +103,62 @@ public class AssignmentService {
     // 새로고침시 세션을 서버에 주었을때 세션만료이면() 로그인 진행 후 크롤링
     // 과목비교x assignment만 비교
     // 세션만료가 아니면 기존 세션으로 크롤링
-    public List<AssignmentResponse> refreshAssignments(String session) {
-        User findUser = userRepository.findBySession(session)
+    public void refreshAssignments(String userId) {
+        User findUser = userRepository.findByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);
+        List<Course> crawledCourses = crawlingService.crawlAssignments(findUser.getSession());
+        List<Assignment> findAssignments = assignmentRepository.findByUserId(userId);
 
-        List<Course> CrawledCourses = crawlingService.crawlAssignments(session);
-        List<Assignment> findCourse = assignmentRepository.findToBeSubmitByUserId(findUser.getUserId());
-        //course 비교  findCourse  == CrawledCourses
+        //user와 연관관계 매핑
+        for (Course crawledCourse : crawledCourses) {
+            crawledCourse.setUser(findUser);
+            for (Assignment assignment : crawledCourse.getAssignments()) {
+                assignment.setUser(findUser);
+            }
+        }
 
 
-        //dto 생성후 반환 findCourse데이터 변경
-        return findCourse.stream()
-                .map(AssignmentResponse::createResponse)
+
+        //TODO: save시 벌크로 저장하기!
+        //db에 사용자가 없는 경우(앱에 처음으로 로그인 한 사용자인 경우)
+        if (findAssignments.isEmpty()) {
+            courseRepository.saveAll(crawledCourses);
+        }
+
+        List<Assignment> crawledAssignments = new ArrayList<>();
+
+        //크롤링한 assignment를 리스트에 담는다
+        for (Course crawledCours : crawledCourses) {
+            for (Assignment assignment : crawledCours.getAssignments()) {
+                crawledAssignments.add(assignment);
+            }
+        }
+
+        //가천대 홈페이지에서 추가된 assignment 리스트를 가져온다
+        List<Assignment> addedAssignments = crawledAssignments.stream()
+                .filter(list -> findAssignments.stream().noneMatch( s-> s.getAssignmentName().equals(list.getAssignmentName())))
                 .collect(Collectors.toList());
 
+        //추가된 assignment가 있으면 추가한다.
+        if(!addedAssignments.isEmpty()) {
+            for (Assignment addedAssignment : addedAssignments) {
+                addedAssignment.setUser(findUser);
+                assignmentRepository.save(addedAssignment);
+            }
+        }
+        //assignment 내용이 변경된게 있으면 변경한다.
+        updateChangedAssignmnet(findAssignments, crawledAssignments);
+
+    }
+
+    private void updateChangedAssignmnet(List<Assignment> findAssignments, List<Assignment> crawledAssignments) {
+        for (Assignment findAssignment : findAssignments) {
+            for (Assignment crawledAssignment : crawledAssignments) {
+                if(findAssignment.isSameAssignment(crawledAssignment)) {
+                    findAssignment.updateInfo(crawledAssignment);
+                }
+            }
+        }
     }
 
     public List<AssignmentResponse> getSubmittedAssignments(String userId) {
@@ -110,18 +179,5 @@ public class AssignmentService {
                 .map(AssignmentResponse::createResponse)
                 .collect(Collectors.toList());
     }
-
-    /*public void updateSubmitStats(String session, SubmitStatusRequest submitStatusRequest) {
-
-        User findUser = userRepository.findBySession(session)
-                .orElseThrow(NoSuchElementException::new);
-
-        Assignment findAssignment = assignmentRepository.findByUserIdAndAssignmentName(findUser.getUserId(),
-                submitStatusRequest.getAssignmentName()).orElseThrow(NoSuchElementException::new);
-
-        findAssignment.changeSubmitStatus(submitStatusRequest.getAssignmentSubmitStatus());
-
-    }*/
-
 
 }

@@ -27,7 +27,8 @@ public class Course {
     @Enumerated(EnumType.STRING)
     private CourseViewStatus courseViewStatus = CourseViewStatus.TRUE;
 
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "user")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user")
     private User user;
 
     @OneToMany(mappedBy = "course" , cascade = CascadeType.ALL)

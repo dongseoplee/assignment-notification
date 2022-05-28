@@ -19,6 +19,7 @@ public class UserRepository {
         em.persist(user);
     }
 
+
     //null 일수도 있으니까 optional 반환!
     public Optional<User> findByUserId(String userId) {
         List<User> users = em.createQuery("select m from User m where m.userId = :userId", User.class)

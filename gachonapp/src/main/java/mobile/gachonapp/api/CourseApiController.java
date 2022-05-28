@@ -1,6 +1,8 @@
 package mobile.gachonapp.api;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import mobile.gachonapp.api.response.NoDataResult;
 import mobile.gachonapp.api.response.Result;
 import mobile.gachonapp.api.response.SuccessResponse;
 import mobile.gachonapp.domain.User;
@@ -13,37 +15,27 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class CourseApiController {
 
     private final CourseService courseService;
 
     @GetMapping("/api/course")
-    public Result getAssignments(@RequestAttribute User user) {
+    public Result getCourses(@RequestAttribute User user) {
         List<CourseResponse> courseResponses = courseService.getCourses(user.getUserId());
-        return new Result(SuccessResponse.ASSIGNMENT_LIST_SUCCESS,courseResponses);
+        return new Result(SuccessResponse.COURSE_LIST_SUCCESS,courseResponses);
     }
 
-    @PostMapping("/api/course/view-status")
-    public Result updateSubjectStatus(@CookieValue(name = "MoodleSession") String session,
-                                      List<CourseStatusRequest> courseStatusRequests) {
+    @GetMapping("/api/course/view-status")
+    public NoDataResult updateCourseViewStatus(@RequestAttribute User user,
+                                               @RequestBody List<CourseStatusRequest> courseStatusRequests) {
 
-        courseService.updateCourseStatus(session, courseStatusRequests);
-        //json에서 subjectname 과 상태를 받는다.
-        //해당 session으로 사용자 찾고 해당 사용자의 subjectname을 찾아 상태를 바꾼다
-        //리턴값은 data 없이 상태만 반환
-        return null;
+        courseService.updateCourseViewStatus(user.getSession(), courseStatusRequests);
+
+        for (CourseStatusRequest courseStatusRequest : courseStatusRequests) {
+            log.info("NAME :" + courseStatusRequest.getCourseName() + "STATUS" + courseStatusRequest.getCourseViewStatus());
+        }
+        return new NoDataResult(SuccessResponse.COURSE_VIEWSTATUS_SUCCESS);
     }
-
-    /*@GetMapping("/api/subject/webex")
-    public Result getWebLink() {
-        //모든 과목 웹엑스 링크 준다 (링크가 없는 과목 어떻게 해결?? -> 우리가 db에 직접 넣어라...)
-        //webLink 반환
-        return null;
-    }*/
-
-
-
-
-
 
 }

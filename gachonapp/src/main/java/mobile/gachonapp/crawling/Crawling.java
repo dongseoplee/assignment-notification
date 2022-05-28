@@ -10,6 +10,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class Crawling {
 
     private static final String loginURL = "https://cyber.gachon.ac.kr/login/index.php";
     private static final String parsingURL = "https://cyber.gachon.ac.kr/";
-    private String crawlingURL = "https://cyber.gachon.ac.kr/mod/assign/index.php?id=";
+    private static final String crawlingURL = "https://cyber.gachon.ac.kr/mod/assign/index.php?id=";
 
     public List<Course> getCrawledAssignments(String session) {
 
@@ -45,6 +46,7 @@ public class Crawling {
             courses.add(course);
 
             //Assigment 크롤링 url
+
             String connectURL = crawlingURL + course.getUrlId();
 
             //과목 document

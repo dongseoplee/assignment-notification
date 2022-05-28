@@ -5,7 +5,6 @@ import mobile.gachonapp.domain.Course;
 import mobile.gachonapp.domain.User;
 import mobile.gachonapp.domain.dto.CourseResponse;
 import mobile.gachonapp.domain.dto.CourseStatusRequest;
-import mobile.gachonapp.exception.NotFindSessionException;
 import mobile.gachonapp.repository.CourseRepository;
 import mobile.gachonapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
-    public void updateCourseStatus(String userId, List<CourseStatusRequest> courseStatusRequests) {
+    public void updateCourseViewStatus(String userId, List<CourseStatusRequest> courseStatusRequests) {
         User findUser = userRepository.findByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);
         List<Course> findCourses = courseRepository.findByUserId(findUser.getUserId());

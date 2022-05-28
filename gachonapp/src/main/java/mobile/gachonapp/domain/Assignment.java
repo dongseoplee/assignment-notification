@@ -21,7 +21,8 @@ public class Assignment {
     private String assignmentName;
     private LocalDateTime deadLine;
 
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "course")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course")
     private Course course;
 
     @Enumerated(EnumType.STRING)
@@ -47,6 +48,31 @@ public class Assignment {
     public void setCourse(Course course) {
         this.course = course;
         course.getAssignments().add(this);
+    }
+
+    public boolean isSameAssignment(Assignment crawledAssignment) {
+        if(assignmentName.equals(crawledAssignment.getAssignmentName()) &&
+        course.getCourseName().equals(crawledAssignment.getCourse().getCourseName())) {
+            return true;
+        }
+            return false;
+    }
+
+    public void updateInfo(Assignment crawledAssignment) {
+        if(!assignmentName.equals(crawledAssignment.getAssignmentName())) {
+            assignmentName = crawledAssignment.getAssignmentName();
+            System.out.println("update name : " + crawledAssignment.getAssignmentName());
+        }
+
+        if(!deadLine.equals(crawledAssignment.getDeadLine())) {
+            deadLine = crawledAssignment.deadLine;
+            System.out.println("update deadline : " + crawledAssignment.getDeadLine());
+        }
+
+        if(!assignmentSubmitStatus.equals(crawledAssignment.getAssignmentSubmitStatus())) {
+            assignmentSubmitStatus = crawledAssignment.assignmentSubmitStatus;
+            System.out.println("update assignmentSubmitStatus : " + crawledAssignment.getAssignmentSubmitStatus());
+        }
     }
 }
 
