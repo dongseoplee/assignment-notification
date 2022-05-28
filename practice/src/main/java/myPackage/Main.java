@@ -38,8 +38,12 @@ public class Main {
                 .get();
 
 
-        //학번, 학과 크롤링 시작
 
+
+        //사용자 이름 크롤링
+        Elements userNameElement = document.select(".user_department.hidden-xs");
+        userName = userNameElement.eq(0).text();
+        System.out.println("User name: " + userName);
         //개인정보수정 URL 크롤링
         Elements elementPrivateInfo = document.select(".items a").eq(0);
         privateURL = elementPrivateInfo.first().getElementsByAttribute("href").attr("href");
