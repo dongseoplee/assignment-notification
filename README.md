@@ -53,11 +53,11 @@ If you don't have an Android device, please use the apk execution program on you
 
 ## Screenshots
 
-### Login and Home <br>
-<img src="https://user-images.githubusercontent.com/76763417/177106777-1ef14bde-fee3-416c-90ec-982d8fcee84f.png" width="300" height="600"/>
+##### Login and Home <br>
+<img src="https://user-images.githubusercontent.com/76763417/177106777-1ef14bde-fee3-416c-90ec-982d8fcee84f.png" width="500" height="500"/>
+<br>
 
-
-### What To Do - Unexpired due date and Do not submit
-### Done - Unexpired due date and submit, Expired due date and submit
-### Not Submitted - Expired due date and Do not submit
-<img src="https://user-images.githubusercontent.com/76763417/177106814-6136fff3-b33e-442b-b839-8532c81f9a8d.png" width="300" height="600"/>
+##### What To Do - Unexpired due date and Do not submit
+##### Done - Unexpired due date and submit, Expired due date and submit
+##### Not Submitted - Expired due date and Do not submit
+<img src="https://user-images.githubusercontent.com/76763417/177106814-6136fff3-b33e-442b-b839-8532c81f9a8d.png" width="600" height="400"/>
