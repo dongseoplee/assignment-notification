@@ -53,17 +53,11 @@ If you don't have an Android device, please use the apk execution program on you
 
 ## Screenshots
 
-1. Login <br>
-<img src="https://user-images.githubusercontent.com/76763417/177102305-b7de051c-e2d4-4c24-b4e6-ab0b2b0da8db.png" width="200" height="400"/>
+### Login and Home <br>
+<img src="https://user-images.githubusercontent.com/76763417/177106777-1ef14bde-fee3-416c-90ec-982d8fcee84f.png" width="300" height="600"/>
 
-2. Home <br>
-<img src="https://user-images.githubusercontent.com/76763417/177102560-04e692e8-e753-4532-82f9-8cd857223789.png" width="200" height="400"/>
 
-3. What To Do - Unexpired due date and Do not submit <br>
-<img src="https://user-images.githubusercontent.com/76763417/177102670-5a8c4eae-2c8d-440a-bcfb-1cffa3fbdc4b.jpg" width="200" height="400"/>
-
-4. Done - Unexpired due date and submit, Expired due date and submit <br>
-<img src="https://user-images.githubusercontent.com/76763417/177102730-2ee4333f-b197-439d-b23d-1f602b4b2a59.jpg" width="200" height="400"/>
-
-5. Not Submitted - Expired due date and Do not submit <br>
-<img src="https://user-images.githubusercontent.com/76763417/177102788-5d1e171c-bfc0-4912-b905-15afb6b2a04c.jpg" width="200" height="400"/>
+### What To Do - Unexpired due date and Do not submit
+### Done - Unexpired due date and submit, Expired due date and submit
+### Not Submitted - Expired due date and Do not submit
+<img src="https://user-images.githubusercontent.com/76763417/177106814-6136fff3-b33e-442b-b839-8532c81f9a8d.png" width="300" height="600"/>
