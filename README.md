@@ -14,6 +14,17 @@ YouTube videos with detailed explanations.<br> <https://www.youtube.com/watch?v=
 
 It can increase the rate of students' submission of assignments, help students establish their academic plans, and reduce academic stress caused by non-submission.
 
+## Screenshots
+
+##### Login and Home <br>
+<img src="https://user-images.githubusercontent.com/76763417/177106777-1ef14bde-fee3-416c-90ec-982d8fcee84f.png" width="500" height="500"/>
+<br>
+
+##### What To Do - Unexpired due date and Do not submit
+##### Done - Unexpired due date and submit, Expired due date and submit
+##### Not Submitted - Expired due date and Do not submit
+<img src="https://user-images.githubusercontent.com/76763417/177106814-6136fff3-b33e-442b-b839-8532c81f9a8d.png" width="600" height="400"/>
+
 
 ## Applicaion Download
 I haven't registered on the Google Play Store yet. Please use Google Drive.
@@ -37,7 +48,7 @@ If you don't have an Android device, please use the apk execution program on you
 
 ```
 
-### 🛠Tech Stack
+### Tech Stack
 [Languages] Java
 
 [FE] Flutter Flow
@@ -51,13 +62,3 @@ If you don't have an Android device, please use the apk execution program on you
 
 <img src="https://user-images.githubusercontent.com/76763417/177102845-e620900c-4832-44d4-9be8-f7632ef98ee8.jpg" width="600" height="350"/>
 
-## Screenshots
-
-##### Login and Home <br>
-<img src="https://user-images.githubusercontent.com/76763417/177106777-1ef14bde-fee3-416c-90ec-982d8fcee84f.png" width="500" height="500"/>
-<br>
-
-##### What To Do - Unexpired due date and Do not submit
-##### Done - Unexpired due date and submit, Expired due date and submit
-##### Not Submitted - Expired due date and Do not submit
-<img src="https://user-images.githubusercontent.com/76763417/177106814-6136fff3-b33e-442b-b839-8532c81f9a8d.png" width="600" height="400"/>
