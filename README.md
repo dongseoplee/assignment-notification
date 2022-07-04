@@ -9,9 +9,9 @@ Therefore, in order to solve this inconvenience, we have developed an app that e
 YouTube videos with detailed explanations.<br> <https://www.youtube.com/watch?v=-nabFSmfPp4>
 
 ## Screenshots
-```,
-1. Login
-![Login](https://user-images.githubusercontent.com/76763417/177102305-b7de051c-e2d4-4c24-b4e6-ab0b2b0da8db.png)
+
+1. Login <br>
+<img src="https://user-images.githubusercontent.com/76763417/177102305-b7de051c-e2d4-4c24-b4e6-ab0b2b0da8db.png1" width="200" height="400"/>
 2. Home
 
 3. What To Do - Unexpired due date and Do not submit
@@ -20,7 +20,6 @@ YouTube videos with detailed explanations.<br> <https://www.youtube.com/watch?v=
 
 5. Not Submitted - Expired due date and Do not submit
 
-```
 
 ## Expectations
 
