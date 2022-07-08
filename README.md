@@ -8,8 +8,21 @@ Gachon University's cyber campus notification schedule is inconvenient for stude
 Therefore, in order to solve this inconvenience, we have developed an app that extracts data from the website of the cyber campus and organizes and guides Gachon University students with assignments.<br><br>
 YouTube videos with detailed explanations.<br> <https://www.youtube.com/watch?v=-nabFSmfPp4>
 
+## Description
 
+You can access the app using Gachon University ID and password. The students number and name are displayed on the home screen. 
 
+There are three menu buttons: What To Do, Done, and Not Submitted.
+
+What To Do - Unexpired due date and Do not submit<br>
+Done - Unexpired due date and submit, Expired due date and submit<br>
+Not Submitted - Expired due date and Do not submit<br>
+
+The three menus show the title of the assignment and the deadline for submitting the assignment. (If the deadline for submission is 00:00, it appears at 23:59 the previous day.)
+
+In particular, the What To Do menu shows the time left until submission.
+
+At the bottom, there is a navigation bar where you can go to the Home, What To Do, Done, Not Submitted menus.
 ## Expectations
 
 It can increase the rate of students' submission of assignments, help students establish their academic plans, and reduce academic stress caused by non-submission.
