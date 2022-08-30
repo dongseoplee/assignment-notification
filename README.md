@@ -23,9 +23,15 @@ The three menus show the title of the assignment and the deadline for submitting
 In particular, the What To Do menu shows the time left until submission.
 
 At the bottom, there is a navigation bar where you can go to the Home, What To Do, Done, Not Submitted menus.
+
+
 ## Expectations
 
 It can increase the rate of students' submission of assignments, help students establish their academic plans, and reduce academic stress caused by non-submission.
+
+
+## Award
+<img src="https://user-images.githubusercontent.com/76763417/187452115-e4c67924-bbb6-4f0f-bc16-85b327c43385.png" width=600 height=400>
 
 ## Screenshots
 
